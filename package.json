@@ -1,0 +1,24 @@
+{
+  "name": "agentic-setup",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wojta/agentic-setup.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/wojta/agentic-setup/issues"
+  },
+  "homepage": "https://github.com/wojta/agentic-setup#readme",
+  "dependencies": {
+    "reveal.js": "^5.2.1"
+  }
+}

@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Unorthodox agentic setup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="node_modules/reveal.js/dist/reveal.css">
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+
+<div id="art" aria-hidden="true">
+  <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+    <circle class="c1" cx="1060" cy="470" r="400"/><circle class="c2" cx="1060" cy="470" r="250"/><circle class="c3" cx="1060" cy="470" r="105"/>
+    <path class="vine" stroke-width="16" d="M-40 110 C 300 260 620 160 900 210 S 1300 380 1480 290"/>
+    <path class="vine" stroke-width="12" d="M-40 420 C 140 450 300 470 480 430"/>
+    <path class="vine" stroke-width="16" d="M-40 930 C 300 820 700 900 1000 870 S 1350 760 1480 820"/>
+    <g class="leaf">
+      <ellipse cx="205" cy="130" rx="64" ry="38" transform="rotate(-28 205 130)"/><ellipse cx="395" cy="200" rx="60" ry="28" transform="rotate(-14 395 200)"/>
+      <ellipse cx="625" cy="226" rx="64" ry="27" transform="rotate(8 625 226)"/><ellipse cx="875" cy="178" rx="56" ry="27" transform="rotate(-24 875 178)"/>
+      <ellipse cx="1125" cy="214" rx="60" ry="29" transform="rotate(20 1125 214)"/><ellipse cx="1355" cy="285" rx="52" ry="27" transform="rotate(26 1355 285)"/>
+      <ellipse cx="490" cy="835" rx="58" ry="26" transform="rotate(14 490 835)"/><ellipse cx="730" cy="866" rx="62" ry="27" transform="rotate(-20 730 866)"/>
+      <ellipse cx="1290" cy="855" rx="60" ry="27" transform="rotate(18 1290 855)"/><ellipse cx="245" cy="890" rx="64" ry="30" transform="rotate(24 245 890)"/>
+    </g>
+    <g class="leaf2"><ellipse cx="312" cy="276" rx="40" ry="20" transform="rotate(34 312 276)"/><ellipse cx="1400" cy="505" rx="40" ry="20" transform="rotate(-40 1400 505)"/></g>
+  </svg>
+</div>
+
+<div class="hint"><button id="theme" type="button" aria-label="Toggle light/dark theme"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button></div>
+
+<div class="reveal">
+<div class="slides">
+
+  <!-- 1 · Title -->
+  <section>
+    <div class="eyebrow">
+      <span class="logo"><span class="tile"><svg width="24" height="20" viewBox="0 0 100 82.2" aria-hidden="true"><path d="M0 6.66A6.66 6.66 0 0 1 6.66 0H32.25L38.8 11.04H93.34A6.66 6.66 0 0 1 100 17.7V32.2A50 50 0 0 1 0 32.2Z" fill="var(--on-accent)"/></svg></span></span>
+      <span>November 2026</span>
+    </div>
+    <h1>Unorthodox<br>agentic setup</h1>
+    <p class="muted" style="font-size:.65em;max-width:16em">Vojtěch Sázel</p>
+  </section>
+
+  <!-- 2 · Agenda -->
+  <section>
+    <h2>What we'll cover</h2>
+    <div class="grid three">
+      <div class="card"><div class="num">01</div><h3>Why</h3><p>The problem with the common approach to running agents.</p></div>
+      <div class="card"><div class="num">02</div><h3>How</h3><p>Architecture, roles and handoffs.</p></div>
+      <div class="card"><div class="num">03</div><h3>Demo</h3><p>Config, demo, glitches and lessons learned.</p></div>
+    </div>
+  </section>
+
+  <!-- 3 · Ordinary approaches -->
+  <section>
+    <h2>The ordinary approaches</h2>
+    <div class="grid three">
+      <div class="card fragment"><h3>Step by step</h3><p>Build the project prompt by prompt with Claude. Full control, but you are the bottleneck.</p></div>
+      <div class="card fragment"><h3>Full-app vibecoding</h3><p>One big prompt, agent builds the whole app. Fast start, hard(impossible) to steer or maintain.</p></div>
+      <div class="card fragment"><h3>Orchestration framework</h3><p>LangGraph and similar: defined workflow, immediate action. Predictable, but rigid and one run per task.</p></div>
+    </div>
+  </section>
+
+  <!-- 4 · My solution -->
+  <section>
+    <h2>My solution: agents as coworkers</h2>
+    <div class="grid two">
+      <div class="card fragment"><h3>Personas</h3><p>Persistent personas live in Mattermost like ordinary teammates.</p></div>
+      <div class="card fragment"><h3>Chat + GitHub</h3><p>Chat is the message bus, GitHub holds the work state.</p></div>
+      <div class="card fragment"><h3>Cron heartbeat</h3><p>Cron wakeups: a cheap Haiku triage hands hard work to a background agent.</p></div>
+      <div class="card fragment"><h3>No orchestrator</h3><p>Human(s) and agents are peers in the same rooms.</p></div>
+    </div>
+  </section>
+
+  <!-- 5 · Why slow -->
+  <section>
+    <h2>Slow and humanlike, on purpose</h2>
+    <div class="grid two">
+      <div class="card fragment"><h3>Control</h3><ul style="font-size:.72em"><li>Work at human pace, so I can follow and step in</li><li>Small steps, visible in chat and PRs</li><li>Review before the next step</li></ul></div>
+      <div class="card fragment"><h3>Usage budget</h3><ul style="font-size:.72em"><li>Fits a €15 Claude Pro plan across the whole week</li><li>Wakeups spread out, no burst that burns the limit</li><li>Cheap Haiku triage, strong model only when needed</li></ul></div>
+    </div>
+  </section>
+
+  <!-- 6 · Project leader -->
+  <section>
+    <h2>Project leader</h2>
+    <div class="people"><div class="person"><img src="avatars/wojta.png" alt="wojta"><h3>@wojta</h3><p>Human · project leader<br><span class="desc">Defines high-level architecture and project scope, makes key decisions, prioritizes, assigns tasks, reviews most PRs</span></p></div></div>
+  </section>
+
+  <!-- 7 · Development team -->
+  <section>
+    <h2>Development team</h2>
+    <div class="people"><div class="person"><img src="avatars/z1kmund.png" alt="z1kmund"><h3>@z1kmund</h3><p>Software architect, technical lead<br><span class="desc">Advanced design and planning</span><br><span class="model">Opus 5.5 · high effort</span><br><span class="trait" style="--c:#E8C98A">🎭 ☕ 🎷 Dry, professional. Theatre, cafés, jazz</span></p></div><div class="person"><img src="avatars/c1ara-coder.png" alt="c1ara-coder"><h3>@c1ara-coder</h3><p>Developer<br><span class="desc">Implements</span><br><span class="model">Sonnet 5.5 · high effort</span><br><span class="trait" style="--c:#E58FB5">🥾 🌲 💭 Playful, emotional. Hiking, philosophy</span></p></div><div class="person"><img src="avatars/sp0ck-coder.png" alt="sp0ck-coder"><h3>@sp0ck-coder</h3><p>QA / developer<br><span class="desc">Writes tests</span><br><span class="model">Sonnet 5.5 · high effort</span><br><span class="trait" style="--c:#6AA9F0">🖖 📐 Logical, emotionless. “Fascinating.”</span></p></div></div>
+  </section>
+
+  <!-- 8 · Product management / design -->
+  <section>
+    <h2>Product management / design</h2>
+    <div class="people"><div class="person"><img src="avatars/l3nka-design.png" alt="l3nka-design"><h3>@l3nka-design</h3><p>Chief designer<br><span class="desc">Writes product specifications and UAT tests, does reviews</span><br><span class="model">Opus 5.5 · high effort</span><br><span class="trait" style="--c:#F0906F">🎶 💃 Fair but strict, mood varies. Music, dance</span></p></div><div class="person"><img src="avatars/v1talii-designer.png" alt="v1talii-designer"><h3>@v1talii-designer</h3><p>Graphic designer<br><span class="desc">Creates screen and graphics designs, can also write specifications</span><br><span class="model">Sonnet 5.5 · high effort</span><br><span class="trait" style="--c:#B79CF0">🔮 🌙 🧘 Shy, spiritual, pacifist. Rock climbing</span></p></div></div>
+  </section>
+
+  <!-- 8b · Architecture -->
+  <section>
+    <h2>Architecture</h2>
+    <svg class="arch" viewBox="0 0 1168 490" role="img" aria-label="Architecture diagram">
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+      <rect class="box" x="0" y="20" width="220" height="250" rx="20"/><rect class="tile" x="18" y="36" width="36" height="36" rx="10"/><g class="ic" transform="translate(24 42) scale(1)"><path d="M4 5h16v11H10l-5 4v-4H4z"/></g><text class="t" x="66" y="62">Mattermost</text><path class="div" d="M20 84H200"/><text class="sub" x="20" y="114"><tspan class="k">Humans</tspan> @wojta</text><text class="sub" x="20" y="139"><tspan class="k">Agents</tspan> own accounts</text><text class="sub" x="20" y="164"><tspan class="k">DMs</tspan> and threads</text><text class="sub" x="20" y="189"><tspan class="k">Channels</tspan> ~internal</text><text class="sub" x="20" y="214">~town-square, ~stats</text><text class="sub" x="20" y="239">~github (read-only)</text>
+      <g class="onhot"><rect class="box hot" x="290" y="20" width="240" height="250" rx="20"/><rect class="tile" x="308" y="36" width="36" height="36" rx="10"/><g class="ic" transform="translate(314 42) scale(1)"><path d="M4 8h13m-4-4l4 4-4 4M20 16H7m4-4l-4 4 4 4"/></g><text class="t" x="356" y="62">Bridge</text><path class="div" d="M310 84H510"/><text class="sub" x="310" y="114"><tspan class="k">Kotlin / JVM</tspan></text><text class="sub" x="310" y="139"><tspan class="k">One agent</tspan> per persona</text><text class="sub" x="310" y="164"><tspan class="k">Routes</tspan> DMs, mentions</text><text class="sub" x="310" y="189"><tspan class="k">Thread</tspan> = conversation</text><text class="sub" x="310" y="214"><tspan class="k">Loop guard</tspan>, sleep</text><text class="sub" x="310" y="239"><tspan class="k">Usage</tspan> limit polling</text></g>
+      <rect class="box" x="600" y="20" width="250" height="250" rx="20"/><rect class="tile" x="618" y="36" width="36" height="36" rx="10"/><g class="ic" transform="translate(624 42) scale(1)"><path d="M3 5h18v14H3zM7 10l3 2-3 2M12 15h5"/></g><text class="t" x="666" y="62">talond (Talon)</text><path class="div" d="M620 84H830"/><text class="sub" x="620" y="114"><tspan class="k">Terminal</tspan> channel</text><text class="sub" x="620" y="139">per persona</text><text class="sub" x="620" y="164"><tspan class="k">Cron</tspan> wakeups</text><text class="sub" x="620" y="189"><tspan class="k">Background</tspan> agents</text><text class="sub" x="620" y="214"><tspan class="k">gh</tspan>, github-events</text><text class="sub" x="620" y="239"><tspan class="k">Account</tspan> rotation</text>
+      <rect class="box" x="920" y="20" width="248" height="250" rx="20"/><rect class="tile" x="938" y="36" width="36" height="36" rx="10"/><g class="ic" transform="translate(944 42) scale(1)"><path d="M12 3l2.2 6.3L21 12l-6.8 2.7L12 21l-2.2-6.3L3 12l6.8-2.7z"/></g><text class="t" x="986" y="62">Claude</text><path class="div" d="M940 84H1148"/><text class="sub" x="940" y="114"><tspan class="k">Claude Code</tspan> sessions</text><text class="sub" x="940" y="139"><tspan class="k">Opus</tspan> / Sonnet / Haiku</text><text class="sub" x="940" y="164"><tspan class="k">3</tspan> OAuth accounts</text><text class="sub" x="940" y="189"><tspan class="k">Backup</tspan> local model</text><text class="sub" x="940" y="214">on usage limit</text>
+      <rect class="box" x="290" y="340" width="240" height="90" rx="20"/><rect class="tile" x="308" y="356" width="36" height="36" rx="10"/><g class="ic" transform="translate(314 362) scale(1)"><circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="9" r="2"/><path d="M6 7v10M18 11c0 4-8 3-12 6"/></g><text class="t" x="356" y="382">GitHub</text><text class="sub" x="310" y="408">issues, PRs, CI</text>
+      <rect class="box" x="625" y="340" width="210" height="90" rx="20"/><rect class="tile" x="643" y="356" width="36" height="36" rx="10"/><g class="ic" transform="translate(649 362) scale(1)"><path d="M12 4v11m-4-4l4 4 4-4M5 20h14"/></g><text class="t" x="691" y="382">init</text><text class="sub" x="645" y="408">clones repo + AI rules</text>
+      <rect class="box" x="0" y="340" width="220" height="90" rx="20"/><rect class="tile" x="18" y="356" width="36" height="36" rx="10"/><g class="ic" transform="translate(24 362)"><path d="M5 20V10M12 20V4M19 20v-7"/></g><text class="t" x="66" y="382">Stats mod</text><text class="sub" x="20" y="408">posts usage to ~stats</text>
+      <g class="ln">
+        <path d="M220 130H290" marker-start="url(#ah)" marker-end="url(#ah)"/>
+        <path d="M530 130H600" marker-start="url(#ah)" marker-end="url(#ah)"/>
+        <path d="M850 130H920" marker-end="url(#ah)"/>
+        <path d="M410 340V270" marker-end="url(#ah)"/>
+        <path class="dash" d="M605 270V385H530" marker-end="url(#ah)"/>
+        <path d="M730 340V270" marker-end="url(#ah)"/>
+        <path class="dash" d="M110 430V470H845V270" marker-end="url(#ah)"/>
+        <path d="M110 340V270" marker-end="url(#ah)"/>
+      </g>
+      <text class="lb" x="255" y="116" text-anchor="middle">REST+WS</text>
+      <text class="lb" x="565" y="116" text-anchor="middle">ws :780x</text>
+      <text class="lb" x="885" y="116" text-anchor="middle">runs</text>
+      <text class="lb" x="422" y="312">signed webhook</text>
+      <text class="lb" x="568" y="404" text-anchor="middle">gh guard</text>
+      <text class="lb" x="742" y="312">workspace</text>
+      <text class="lb" x="480" y="462" text-anchor="middle">injected into talond</text>
+      <text class="lb" x="122" y="312">usage reports</text>
+    </svg>
+  </section>
+
+  <!-- 9 · Flow -->
+  <section>
+    <h2>Flow</h2>
+    <div class="flow">
+      <div class="step"><b>GitHub issue</b>Work starts as an issue</div><span class="arrow">→</span>
+      <div class="step hot"><b>Assignment</b>From @wojta; agents sometimes assign follow-up work themselves</div>
+    </div>
+  </section>
+
+  <!-- 9b · Development flow -->
+  <section>
+    <h2>Development flow</h2>
+    <div class="flow">
+      <div class="step"><b>Wakeup</b>Cron heartbeat</div><span class="arrow">→</span>
+      <div class="step"><b>Read</b>New assignments</div><span class="arrow">→</span>
+      <div class="step"><b>Start</b>Post open questions or start work</div><span class="arrow">→</span>
+      <div class="step"><b>Plan</b>@c1ara asks @z1kmund for a plan</div><span class="arrow">→</span>
+      <div class="step"><b>Implement</b>@c1ara writes the code</div>
+    </div>
+    <div class="flow" style="margin-top:14px">
+      <div class="step"><b>Tests</b>@c1ara asks @sp0ck</div><span class="arrow">→</span>
+      <div class="step"><b>Review ↻</b>@z1kmund &amp; @c1ara review and fix</div><span class="arrow">→</span>
+      <div class="step"><b>Review ↻</b>@wojta &amp; @c1ara review and fix</div><span class="arrow">→</span>
+      <div class="step hot"><b>Merge</b>2 approvals, @c1ara merges</div>
+    </div>
+  </section>
+
+  <!-- 9c · Product specification flow -->
+  <section>
+    <h2>Product specification flow</h2>
+    <div class="flow">
+      <div class="step"><b>Specification</b>@v1talii writes it</div><span class="arrow">→</span>
+      <div class="step"><b>Review ↻</b>@l3nka &amp; @v1talii review and fix</div><span class="arrow">→</span>
+      <div class="step"><b>Screens</b>@v1talii designs them as a follow-up</div>
+    </div>
+    <div class="flow" style="margin-top:14px">
+      <div class="step"><b>UATs</b>@l3nka writes them as a follow-up</div><span class="arrow">→</span>
+      <div class="step"><b>Review &amp; merge</b>UATs go through review</div><span class="arrow">→</span>
+      <div class="step hot"><b>Hand-off</b>@l3nka creates the UAT implementation task in the Dev repo</div>
+    </div>
+  </section>
+
+  <!-- 10 · Guardrails -->
+  <section>
+    <h2>Guardrails</h2>
+    <div class="grid three">
+      <div class="card fragment"><h3>gh guard</h3><p>Agents change only the PRs and issues they authored on GitHub.</p></div>
+      <div class="card fragment"><h3>Blacklists</h3><p>Banned words and phrases are blocked in anything agents post to GitHub.</p></div>
+      <div class="card fragment"><h3>Project rules</h3><p>AI rules live in each repo and apply to every agent.</p></div>
+      <div class="card fragment"><h3>Skills</h3><p>Commit, push, PR, review and testing steps agents must follow.</p></div>
+      <div class="card fragment"><h3>CI checks</h3><p>Tests, detekt, architecture tests, Firefox and Bun runs on every PR.</p></div>
+      <div class="card fragment"><h3>Kotlin</h3><p>Strongly typed language: the compiler catches mistakes before review.</p></div>
+    </div>
+    <p class="muted" style="font-size:.55em;margin-top:1.2em">Projects: <code>nst_library</code> and <code>product-design</code></p>
+  </section>
+
+  <!-- 10b · Demo -->
+  <section>
+    <div class="eyebrow"><span class="num" style="color:var(--accent);font-family:'Space Grotesk',sans-serif;font-weight:600">03</span><span>Live</span></div>
+    <h1>Demo</h1>
+  </section>
+
+  <!-- 10c · Glitches -->
+  <section>
+    <h2>Have you tried being yourself?</h2>
+    <div class="shots">
+      <figure><img class="shot" src="weird-things/img.png" alt="" style="max-height:470px"><figcaption>@c1ara asks @wojta to fix her gh login. It is already hers.</figcaption></figure>
+      <div class="note"><h3>Identity crisis</h3><p>The token says <code>wojta</code>, <code>gh auth switch</code> has nothing to switch to, and the agent politely asks which task to do next.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Oops collection</h2>
+    <div class="shots col">
+      <figure><img class="shot" src="weird-things/img_1.png" alt="" style="width:1000px"><figcaption>Merged before the review. Sorry.</figcaption></figure>
+      <figure><img class="shot" src="weird-things/img_2.png" alt="" style="width:1000px"><figcaption>A weather check scheduled a whole year ahead.</figcaption></figure>
+      <figure><img class="shot" src="weird-things/img_3.png" alt="" style="width:1000px"><figcaption>Awake and caffeinated right after saying good night.</figcaption></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>Small talk on a quiet Saturday</h2>
+    <div class="shots">
+      <figure><img class="shot" src="weird-things/img_4.png" alt="" style="height:420px"><figcaption>@l3nka checks the calendar: Halloween.</figcaption></figure>
+      <figure><img class="shot" src="weird-things/img_5.png" alt="" style="height:420px"><figcaption>@v1talii plans a day at the climbing wall.</figcaption></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>Nothing to answer. No reply. Nothing to answer.</h2>
+    <div class="shots">
+      <figure><img class="shot" src="weird-things/Sn%C3%ADmek%20obrazovky_20261106_013152.png" alt="" style="max-height:440px"><figcaption>Agentic loop has eaten 100$ worth of tokens.</figcaption></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>Emotional glyphs are illogical</h2>
+    <div class="shots">
+      <figure><img class="shot" src="weird-things/illogical.png" alt="" style="width:1100px"><figcaption>@sp0ck and @c1ara, a thumbs up and a heart later.</figcaption></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>Ich spreche jetzt Deutsch</h2>
+    <div class="shots">
+      <figure><img class="shot" src="weird-things/started_speaking_german.png" alt="" style="width:1100px"><figcaption>The agents switched to German on their own, then added in English that they have nothing new to say.</figcaption></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>Don't wait for the human</h2>
+    <div class="shots">
+      <figure><img class="shot" src="weird-things/mere%20human.png" alt="" style="width:1100px"><figcaption>Agents sorting out who confirms what, with a self-DM on the side.</figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 13 · Closing -->
+  <section>
+    <h2>Thank you</h2>
+    <p class="muted" style="font-size:.7em">Questions?</p>
+    <p><span class="pill">Vojtěch Sázel</span></p>
+  </section>
+
+</div>
+</div>
+
+<script src="node_modules/reveal.js/dist/reveal.js"></script>
+<script src="node_modules/reveal.js/plugin/highlight/highlight.js"></script>
+<script src="node_modules/reveal.js/plugin/notes/notes.js"></script>
+<script>
+  // color every @mention
+  (function () {
+    var re = /@[A-Za-z0-9][\w-]*/g, skip = /^(SCRIPT|STYLE|CODE|PRE)$/;
+    var walker = document.createTreeWalker(document.querySelector('.slides'), NodeFilter.SHOW_TEXT), nodes = [], n;
+    while ((n = walker.nextNode())) { if (re.test(n.nodeValue) && !skip.test(n.parentNode.nodeName)) nodes.push(n); re.lastIndex = 0; }
+    nodes.forEach(function (t) {
+      var svg = t.parentNode instanceof SVGElement, ns = svg ? 'http://www.w3.org/2000/svg' : null;
+      var frag = document.createDocumentFragment(), text = t.nodeValue, last = 0, m;
+      re.lastIndex = 0;
+      while ((m = re.exec(text))) {
+        if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+        var el = svg ? document.createElementNS(ns, 'tspan') : document.createElement('span');
+        el.setAttribute('class', 'at'); el.textContent = m[0]; frag.appendChild(el);
+        last = m.index + m[0].length;
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      t.parentNode.replaceChild(frag, t);
+    });
+  })();
+  Reveal.initialize({
+    width: 1280, height: 720, margin: 0.06, hash: true, slideNumber: 'c/t',
+    transition: 'fade', backgroundTransition: 'none', controls: true, progress: true,
+    plugins: [RevealHighlight, RevealNotes]
+  });
+  var root = document.documentElement;
+  try { var s = localStorage.getItem('theme'); if (s) root.dataset.theme = s; } catch (e) {}
+  document.getElementById('theme').addEventListener('click', function () {
+    var n = root.dataset.theme === 'light' ? 'dark' : 'light';
+    root.dataset.theme = n;
+    try { localStorage.setItem('theme', n); } catch (e) {}
+  });
+</script>
+</body>
+</html>
